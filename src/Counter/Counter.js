@@ -8,11 +8,11 @@ export const Counter = ({ counter, increase, decrease, reset }) => (
       Increase
     </button>
     {' '}
-    <button className='btn btn-primary' onClick={decrease}>
+    <button disabled={ counter === 0 ? true : false } className='btn btn-primary' onClick={decrease}>
       Decrease
     </button>
     {' '}
-    <button className='btn btn-danger' onClick={reset}>
+    <button disabled={ counter === 0 ? true : false }className='btn btn-danger' onClick={reset}>
       Reset
     </button>
   </div>

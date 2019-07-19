@@ -1,35 +1,102 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export const Todos = ({ todos, remove }) => (
-  <div style={{ margin: '0 auto', maxWidth: '400px' }} >
-    <h2>Todos:</h2>
-    <ul className='list-group list-group-flush'>
-    {
-      todos.map((t, idx) => (
-        <li key={t} className='list-group-item d-flex justify-content-between align-items-center'>
-          {++idx}. {t}
-          <button className='close' onClick={() => remove(t)}>
-            <span >&times;</span>
-          </button>
-        </li>
-      ))
+import TodoView from './TodoView';
+
+export default class Todos extends Component {
+  state = {
+    newTypedTodoText: '',
+    isEdit: false,
+    editTypedTodoText: '',
+  };
+
+  onHandleChangeText = ({ target: { value } }) => {
+    this.setState({ newTypedTodoText: value });
+  };
+
+  toogleEditTodo = idx => {
+    this.setState({ isEdit: idx });
+  };
+
+  onHandleEditTodo = ({ target: { value } }) => {
+    this.setState({ editTypedTodoText: value });
+  };
+
+  handleOnFocus = todoText => {
+    this.setState(prevState => ({
+      editTypedTodoText: prevState.editTypedTodoText === '' ? todoText : editTypedTodoText,
+    }));
+  };
+
+  handleOnBlur = prevTodo => {
+    const { editTypedTodoText } = this.state;
+    const { todos, edit, remove } = this.props;
+
+    if (editTypedTodoText === prevTodo) {
+      this.setState({
+        isEdit: false,
+        editTypedTodoText: '',
+      });
+      return;
     }
-    </ul>
 
-    <br />
-    <div className='input-group'>
-      <input type='text' className='form-control' placeholder='Write something' />
-      <div className='input-group-append'>
-        <button className='btn btn-outline-secondary' onClick={() => alert('Not implemented!')}>Add</button>
-      </div>
-    </div>
+    this.setState({
+      isEdit: false,
+      editTypedTodoText: '',
+    });
+    editTypedTodoText === ''
+      ? remove(prevTodo)
+      : this.validateForExistTodo(editTypedTodoText, todos)
+      ? alert('Todo is exist or almost the same')
+      : edit(prevTodo, editTypedTodoText);
+  };
 
-  </div>
-)
-Todos.propTypes = {
-  todos: PropTypes.array.isRequired,
-  remove: PropTypes.func.isRequired
+  onHandleAddNewTodo = () => {
+    const { newTypedTodoText } = this.state;
+    const { todos, add } = this.props;
+    this.setState({ newTypedTodoText: '' });
+    this.validateForExistTodo(newTypedTodoText, todos) || '' ? alert('Todo is exist or almost the same or empty') : add(newTypedTodoText);
+  };
+
+  validateForExistTodo = (todo, todos) => {
+    const formatFunction = text =>
+      text
+        .replace(/\s+/gm, ' ')
+        .trim()
+        .toLowerCase();
+
+    const formatedText = formatFunction(todo);
+    const formatedDb = todos.map(el => formatFunction(el));
+
+    return formatedDb.includes(formatedText) || !formatedText ? true : false;
+  };
+
+  render() {
+    const { newTypedTodoText, isEdit, editTypedTodoText } = this.state;
+    const { todos, remove } = this.props;
+    return (
+      <TodoView
+        data={todos}
+        isEdit={isEdit}
+        remove={remove}
+        toogleEditTodo={this.toogleEditTodo}
+        editTypedTodoText={editTypedTodoText}
+        onHandleEditTodo={this.onHandleEditTodo}
+        handleOnFocus={this.handleOnFocus}
+        handleOnBlur={this.handleOnBlur}
+        newTypedTodoText={newTypedTodoText}
+        onHandleChangeText={this.onHandleChangeText}
+        onHandleAddNewTodo={this.onHandleAddNewTodo}
+      />
+    );
+  }
 }
 
-export default Todos
+Todos.propTypes = {
+  todos: PropTypes.array.isRequired,
+  add: PropTypes.func.isRequired,
+  edit: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
+  editTypedTodoText: PropTypes.string,
+  newTypedTodoText: PropTypes.string,
+};

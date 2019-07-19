@@ -1,40 +1,52 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const TODOS_ADD = 'TODOS_ADD'
-export const TODOS_REMOVE = 'TODOS_REMOVE'
+export const TODOS_ADD = 'TODOS_ADD';
+export const TODOS_EDIT = 'TODOS_EDIT';
+export const TODOS_REMOVE = 'TODOS_REMOVE';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function add (todo = '') {
+export function add(todo = '') {
   return {
     type: TODOS_ADD,
-    payload: todo
-  }
+    payload: todo,
+  };
 }
 
-export function remove (todo) {
+export function edit(todo, newTodo) {
+  return {
+    type: TODOS_EDIT,
+    payload: {
+      prev: todo,
+      new: newTodo,
+    },
+  };
+}
+
+export function remove(todo) {
   return {
     type: TODOS_REMOVE,
-    payload: todo
-  }
+    payload: todo,
+  };
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [TODOS_ADD]: (state, action) => [...state, action.payload],
-  [TODOS_REMOVE]: (state, action) => state.filter(t => t !== action.payload)
-}
+  [TODOS_ADD]: (state, action) => ({ data: [...state.data, action.payload] }),
+  [TODOS_EDIT]: (state, action) => ({ data: state.data.map(t => (t === action.payload.prev ? action.payload.new : t)) }),
+  [TODOS_REMOVE]: (state, action) => ({ data: state.data.filter(t => t !== action.payload) }),
+};
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = ['Buy milk', 'Do exercises', 'Cook dinner']
-export default function todosReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+const initialState = ['Buy milk', 'Do exercises', 'Cook dinner'];
+export default function todosReducer(state = { data: initialState }, action) {
+  const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state
+  return handler ? handler(state, action) : state;
 }

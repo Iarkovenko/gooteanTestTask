@@ -33,7 +33,7 @@ export function reset () {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [COUNTER_INCREASE]: (state, action) => state + action.payload,
-  [COUNTER_DECREASE]: (state, action) => state - action.payload,
+  [COUNTER_DECREASE]: (state, action) => state > 0 ? state - action.payload : 0,
   [COUNTER_RESET]: (state, action) => 0
 }
 

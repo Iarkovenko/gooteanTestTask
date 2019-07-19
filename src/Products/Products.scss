@@ -1,3 +1,120 @@
-.products-container {
-  margin: '0 auto'
+.product__card--style {
+  &.product__card__all {
+    height: auto !important;
+    min-height: 300px;
+  }
+  min-height: 345px;
+  border: 1px solid #eeeeee;
+  margin-bottom: 30px;
+  position: relative;
+  .product__image {
+    height: 230px;
+    line-height: 230px;
+    text-align: center;
+    border-bottom: 1px solid #eeeeee;
+  }
 }
+
+.product__card img.lazy-loaded {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+}
+
+.product__card--style .product__image img {
+  max-height: 90%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.product__card img {
+  -webkit-filter: blur(5px);
+  filter: blur(10px);
+  transition: filter 1s, -webkit-filter 1s;
+}
+
+img {
+  vertical-align: middle;
+  border: 0;
+}
+
+.product__card--style {
+  &.product__card__all .product__caption {
+    position: relative;
+  }
+  .product__caption {
+    padding: 20px 15px;
+  }
+}
+
+.detail-link {
+  opacity: 0;
+  display: none;
+  text-decoration: none;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  top: 15%;
+  transition: opacity 0.23s ease-in-out;
+}
+.detail-pick {
+  opacity: 0;
+  display: none;
+  text-decoration: none;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  bottom: 20%;
+  transition: opacity 0.23s ease-in-out;
+}
+
+// .product__card {
+//   position: relative;
+//   &:hover {
+//     .detail-link {
+//       opacity: 1;
+//       ::before {
+//         content: '';
+//         top: 0;
+//         opacity: 0.23;
+//         background-color: #00868b;
+//         background-position: center;
+//         background-repeat: no-repeat;
+//       }
+//       position: absolute;
+//       top: 0;
+//       color: white;
+//       height: 49.5%;
+//       display: unset;
+//       transition: opacity 0.23s ease-in-out 1s;
+//       // background-size: 100% 100%;
+//       transition: background 0.23s ease-in-out, opacity 0.23s ease-in-out;
+//     }
+//     .detail-pick {
+//       opacity: 1;
+//       ::before {
+//         content: '';
+//         bottom: 0;
+//         opacity: 0.23;
+//         background-color: #ff5252;
+//         background-position: center;
+//         background-repeat: no-repeat;
+//       }
+//       position: absolute;
+//       bottom: 0;
+//       display: unset;
+//       height: 49.5%;
+//       transition: opacity 0.23s ease-in-out;
+
+//       // background-size: 100% 100%;
+//       transition: background 0.23s ease-in-out, opacity 0.23s ease-in-out;
+//     }
+//   }
+// }
